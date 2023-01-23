@@ -54,6 +54,7 @@ app.use((err, res) => {
 
 const socketServer = http.createServer(app);
 export const io = require('socket.io')(socketServer, {
+  path: '/socket/',
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],

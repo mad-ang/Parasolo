@@ -12,7 +12,7 @@ import { ServerToClientEvents, ClientToServerEvents } from 'src/api/chat';
 import styled from 'styled-components';
 import Colors from 'src/utils/Colors';
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
+// const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
 export default function BottomAppBar(props) {
   const dispatch = useAppDispatch();

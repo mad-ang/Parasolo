@@ -20,7 +20,7 @@ export default class chatNetwork {
         ? `http://15.164.233.132:5002`
         : `http://${window.location.hostname}:5002`;
 
-    this.socketClient = io(`${socketUrl}`);
+    this.socketClient = io(`${socketUrl}`,{path: "/socket/"});
     this.oldMessages = [];
 
     this.socketClient.on('request-friend', (data) => {
