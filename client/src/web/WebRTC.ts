@@ -20,7 +20,7 @@ export default class WebRTC {
     const sanitizedId = this.replaceInvalidId(userId);
     this.myPeer = new Peer(sanitizedId);
     this.network = network;
-    this.myPeer.on('error', (err) => {
+    this.myPeer.on('error', err => {
       console.log(err.type);
       console.error(err);
     });

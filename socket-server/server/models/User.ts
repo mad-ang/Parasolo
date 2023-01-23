@@ -1,8 +1,8 @@
 import { config } from '../envconfig';
 import { Schema, model, Document, Model } from 'mongoose';
 import { IUserInfo } from '../controllers/UserControllers/types';
+import bcrypt from 'bcryptjs'
 
-const bcrypt = require('bcrypt');
 const saltRounds = config.bcrypt.saltRounds;
 
 const user = new Schema<IUserInfo>({
@@ -31,7 +31,8 @@ user.pre('save', function (next) {
     // genSalt: salt 생성
     bcrypt.genSalt(saltRounds, function (err: any, salt: string) {
       if (err) return next(err);
-      bcrypt.hash(user.password, salt, function (err: any, hashedPassword: string) {
+      if (user.password)
+        bcrypt.hash(user.password, salt, function (err: any, hashedPassword: string) {
         // hash의 첫번째 인자: 비밀번호의 Plain Text
         if (err) return next(err);
         user.password = hashedPassword; // 에러없이 성공하면 비밀번호의 Plain Text를 hashedPassword로 교체해줌

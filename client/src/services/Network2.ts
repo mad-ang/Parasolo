@@ -15,7 +15,7 @@ export default class chatNetwork {
   public oldMessages: any[];
 
   constructor() {
-    const socketUrl =
+    const socketUrl = 
       process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
         ? `http://15.164.233.132:5002`
         : `http://${window.location.hostname}:5002`;

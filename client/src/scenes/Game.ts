@@ -12,7 +12,7 @@ import OtherPlayer from '../characters/OtherPlayer';
 import PlayerSelector from '../characters/PlayerSelector';
 import Network from '../services/Network';
 import Network2 from '../services/Network2';
-import { IPlayer } from '../types/ITownState';
+import { IPlayer } from '../types/IParaState';
 import { PlayerBehavior } from '../types/PlayerBehavior';
 import { ItemType } from '../types/Items';
 import store from '../stores';

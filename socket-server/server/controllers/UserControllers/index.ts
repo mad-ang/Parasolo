@@ -1,5 +1,7 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
+const jwt = require('jsonwebtoken')
+// import jwt from 'jsonwebtoken';
+
 import { config } from '../../envconfig';
 const AUTH_ERROR = { message: '사용자 인증 오류' };
 
@@ -12,16 +14,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 async function hashPassword(user: IUserInfo) {
   const password = user.password;
-  const saltRounds = config.bcrypt.saltRounds;
-
+  const saltRounds = String(config.bcrypt.saltRounds);
   const hashedPassword = await new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, function (err: any, hash: any) {
-      if (err) reject(err);
-      resolve(hash);
-    });
+    if (password)
+      bcrypt.hash(password, saltRounds, function (err: any, hash: any) {
+        if (err) reject(err);
+        resolve(hash);
+      });
   });
 
   return hashedPassword;
+  // return password
 }
 
 export const signUp = async (req: Request, res: Response) => {
@@ -96,55 +99,58 @@ export const login = async (req: Request, res: Response) => {
       status: 400,
       message: '아이디를 확인해주세요.',
     });
-  }
-
-  const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
-  if (isPasswordCorrect) {
-    const accessToken = jwt.sign(
-      {
-        userId: foundUser.userId,
-        username: foundUser.username,
-        uuid: uuidv4(),
-      },
-      config.jwt.secretKey,
-      {
-        expiresIn: '1h',
-      }
-    );
-
-    const refreshToken = jwt.sign(
-      {
-        userId: foundUser.userId,
-        username: foundUser.username,
-        uuid1: uuidv4(),
-        uuid2: uuidv4(),
-      },
-      config.jwt.secretKey
-    );
-
-    await User.collection.updateOne(
-      { userId: foundUser.userId },
-      {
-        $set: {
-          refreshToken: refreshToken,
-          lastUpdated: new Date(),
-        },
-      }
-    );
-
-    res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
-    res.status(200).json({
-      status: 200,
-      payload: {
-        userId: foundUser.userId,
-        accessToken: accessToken,
-      },
-    });
   } else {
-    return res.status(400).json({
-      status: 400,
-      message: '비밀번호가 올바르지 않습니다.',
-    });
+    const isPasswordCorrect = false
+    if (foundUser.password) {
+      // const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
+    }
+    if (isPasswordCorrect) {
+      const accessToken = jwt.sign(
+        {
+          userId: foundUser.userId,
+          username: foundUser.username,
+          uuid: uuidv4(),
+        },
+        config.jwt.secretKey,
+        {
+          expiresIn: '1h',
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: foundUser.userId,
+          username: foundUser.username,
+          uuid1: uuidv4(),
+          uuid2: uuidv4(),
+        },
+        config.jwt.secretKey
+      );
+
+      await User.collection.updateOne(
+        { userId: foundUser.userId },
+        {
+          $set: {
+            refreshToken: refreshToken,
+            lastUpdated: new Date(),
+          },
+        }
+      );
+
+      res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
+      res.status(200).json({
+        status: 200,
+        payload: {
+          userId: foundUser.userId,
+          accessToken: accessToken,
+        },
+      });
+    } else {
+      return res.status(400).json({
+        status: 400,
+        message: '비밀번호가 올바르지 않습니다.',
+      });
+    }
   }
 };
 
@@ -387,3 +393,4 @@ export const lookupUser = async (req: Request, res: Response) => {
   //   result.push(user.userId)
   // })
 };
+

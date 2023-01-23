@@ -173,8 +173,6 @@ export default class MyPlayer extends Player {
         } else if (Phaser.Input.Keyboard.JustDown(keyR) && closePlayer) {
           // if press R in front of another player
           console.log(closePlayer);
-
-          network.sendPrivateMessage(this.userId, closePlayer.userId, '안녕하세요');
           return;
         } else {
           const speed = cursors.shift?.isDown ? 240 : 120;

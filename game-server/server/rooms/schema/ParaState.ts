@@ -1,5 +1,5 @@
 import { Schema, ArraySchema, SetSchema, MapSchema, type } from '@colyseus/schema';
-import { IPlayer, IParaState, ITable, IChatMessage, IChair } from '../../../types/IParaState';
+import { IPlayer, IParaState, ITable, IChatMessage, IChair } from "../../../types/IParaState"
 import { IUserInfo, IUserProfile } from '../../controllers/UserControllers/types';
 
 export class UserProfile extends Schema implements IUserProfile {
@@ -63,7 +63,6 @@ function getRoomId() {
     whiteboardRoomIds.add(result);
     return result;
   } else {
-    console.log('roomId exists, remaking another one.');
     getRoomId();
   }
 }

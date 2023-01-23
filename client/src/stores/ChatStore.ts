@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IChatMessage } from '../types/ITownState';
+import { IChatMessage } from '../types/IParaState';
 import phaserGame from '../PhaserGame';
 import Game from 'scenes/Game';
 

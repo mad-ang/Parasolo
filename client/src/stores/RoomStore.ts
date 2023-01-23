@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RoomAvailable } from 'colyseus.js';
 import { RoomType } from '../types/Rooms';
-import { IPlayer } from '../types/ITownState';
+import { IPlayer } from '../types/IParaState';
 interface RoomInterface extends RoomAvailable {
   name?: string;
 }

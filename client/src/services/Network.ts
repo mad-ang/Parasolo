@@ -1,10 +1,10 @@
 import { Client, Room } from 'colyseus.js';
 import {
   ITable,
-  ITownState,
+  IParaState,
   IPlayer,
   // IWhiteboard,
-} from '../types/ITownState';
+} from '../types/IParaState';
 import { Message } from '../types/Messages';
 import { IRoomData, RoomType } from '../types/Rooms';
 import { ItemType } from '../types/Items';
@@ -29,17 +29,17 @@ import { UserResponseDto } from 'src/api/chat';
 const cookies = new Cookies();
 export default class Network {
   private client: Client;
-  private room?: Room<ITownState>;
+  private room?: Room<IParaState>;
   private lobby!: Room;
   webRTC?: WebRTC;
   userId!: string;
   mySessionId!: string;
 
   constructor() {
-    const endpoint =
-      process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-        ? `wss://${import.meta.env.VITE_SERVER_URL}`
-        : `ws://${window.location.hostname}:8080`;
+    const endpoint = 
+    process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
+      ? `wss://${import.meta.env.VITE_SERVER_URL}`
+      : `ws://${window.location.hostname}:8080`;
 
     console.log(process.env.NODE_ENV);
     this.client = new Client(endpoint);

@@ -16,6 +16,7 @@ export default defineConfig(({ command, mode }) => {
         },
       }),
     ],
+    port: 5173,
     define: {
       __APP_ENV__: env.APP_ENV,
     },
