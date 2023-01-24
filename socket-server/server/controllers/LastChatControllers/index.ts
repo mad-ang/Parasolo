@@ -161,6 +161,7 @@ export const setfriend = async (req: Request, res: Response) => {
     }
   );
 };
+
 const addLastChat = async (obj: {
   myInfo: UserResponseDto;
   friendInfo: UserResponseDto;
