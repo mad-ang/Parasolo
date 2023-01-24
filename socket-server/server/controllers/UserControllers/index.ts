@@ -13,6 +13,7 @@ import 'express-async-errors';
 import { v4 as uuidv4 } from 'uuid';
 
 async function hashPassword(user: IUserInfo) {
+  
   const password = user.password;
   const saltRounds = config.bcrypt.saltRounds;
   const hashedPassword = await new Promise((resolve, reject) => {
