@@ -38,9 +38,6 @@ export default function ChatBubbles(props) {
   useEffect(() => {
     console.log('마운트');
     socketNetwork.joinRoom(roomId, userId, friendId, callbackForJoinRoom);
-  
-    if (!roomStatus) dispatch(setRequestFriendCnt(-1));
-  }, []);
 
   useEffect(() => {
     if (!props.newMessage || props.newMessage?.message.length === 0) return;
