@@ -36,10 +36,10 @@ export default class Network {
   mySessionId!: string;
 
   constructor() {
-    const endpoint = 'ws://localhost:8080'
-    // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-    //   ? `wss://${import.meta.env.VITE_SERVER_URL}`
-    //   : `ws://${window.location.hostname}:8080`;
+    const endpoint = 
+    process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
+      ? `wss://${import.meta.env.VITE_SERVER_URL}`
+      : `ws://${window.location.hostname}:8080`;
 
     console.log(process.env.NODE_ENV);
     this.client = new Client(endpoint);
