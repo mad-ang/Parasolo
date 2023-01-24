@@ -93,7 +93,7 @@ export const ConversationList = () => {
   return (
     <DMmessageList>
       <UnorderedList>
-        {rooms &&
+        { rooms.length !==0 ?
           rooms.map((room) => {
             if (newMessage?.message && newMessage?.userId === room.friendInfo?.userId) {
               room.unreadCount! += 1;
@@ -128,7 +128,10 @@ export const ConversationList = () => {
                 </IDwithLastmessage>
               </ListTag>
             );
-          })}
+          }) :
+          <><Textbox> 채팅방에 아무도 없어요 🥲 </Textbox>
+        <Textbox> 친구 신청을 보내보아요 </Textbox></>
+          }
       </UnorderedList>
       {friendRequestModal ? (
         <FriendRequest
@@ -216,3 +219,9 @@ const DMmessageList = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+const Textbox = styled.div`
+font-size: 20px;
+text-align: center;
+margin: 5px;
+`
