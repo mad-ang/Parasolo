@@ -260,5 +260,4 @@ const Buttons = styled.div`
 const AlreadyFriendMessage = styled.div`
   font-size: 22px;
 `;
-
   
