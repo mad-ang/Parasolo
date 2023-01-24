@@ -20,7 +20,13 @@
 # syntax=docker/dockerfile:1
 FROM node:19.3-alpine
 
-ENV NODE_ENV=production
+ENV NODE_ENV=production \
+    VITE_DEV_MODE=false \
+    # VITE_SERVER=DEV \
+    VITE_SERVER=PRO
+    # VITE_SERVER_URL=www.momstown.link \
+    # VITE_SERVER_URL=43.201.32.156:8080 \
+    # VITE_SERVER_URL=momstown.herokuapp.com/ \
 WORKDIR /app
 COPY ["package.json", "package-lock.json*","tsconfig.*", "./"]
 RUN yarn 
