@@ -39,7 +39,7 @@ export const chatController = (socket: Socket) => {
       roomId = createRoom();
       updateRoomId({ myId: userId, friendId: friendId, roomId: roomId }).then(() => {
         // userMap.get(friendId)?.emit('updata-room-id');
-        rooms[roomId].push(userId);
+        rooms[roomId].push(userId); 
       });
     }
     readMessage({ roomId, userId, friendId });
