@@ -166,9 +166,11 @@ export default function DMboxButton() {
   return (
     <Wrapper>
       <StyledRedBox onClick={handleClick} pressed={ActivatedNav}>
-        {(requestFriendCnt > 0 || newMessageCnt > 0) && (
+      {alertCnt > 0 && <UnreadBadge>{alertCnt}</UnreadBadge>}
+        
+        {/* {(requestFriendCnt > 0 || newMessageCnt > 0) && (
           <UnreadBadge>{requestFriendCnt + newMessageCnt}</UnreadBadge>
-        )}
+        )} */}
         <VolunteerActivismIcon fontSize="large" sx={{ color: '#fff' }} />
       </StyledRedBox>
       
