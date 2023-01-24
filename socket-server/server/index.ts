@@ -81,8 +81,11 @@ io.on('connection', (socket: Socket) => {
     // Todo: delete on userMap.
     console.log('the challenger disconnected');
   });
+  socket.on('connect_error', (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
 });
 
 
-
+socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 S3.init();
