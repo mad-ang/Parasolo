@@ -15,10 +15,10 @@ export default class chatNetwork {
   public oldMessages: any[];
 
   constructor() {
-    const socketUrl = 
-      process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-        ? `http://15.164.233.132:5002`
-        : `http://${window.location.hostname}:5002`;
+    const socketUrl = 'http://localhost:5002'
+      // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
+      //   ? `http://15.164.233.132:5002`
+      //   : `http://${window.location.hostname}:5002`;
 
     this.socketClient = io(`${socketUrl}`,{path: "/socket/"});
     this.oldMessages = [];
