@@ -144,6 +144,7 @@ export default function DMboxButton() {
   const ActivatedNav = useAppSelector((state) => state.nav.currentState);
   const requestFriendCnt = useAppSelector((state) => state.dm.requestFriendCnt);
   const newMessageCnt = useAppSelector((state) => state.dm.newMessageCnt);
+  const [alertCnt, setAlertCnt] = useState<number>(requestFriendCnt + newMessageCnt);
 
   // const NavControllerChattingRoomActivated = useAppSelector(
   //   (state) => state.nav.NavControllerChattingRoomActivated
@@ -157,6 +158,10 @@ export default function DMboxButton() {
       dispatch(SetWhichModalActivated(ModalState.ChattingList));
     }
   }
+
+  useEffect(() => {
+    setAlertCnt(requestFriendCnt + newMessageCnt);
+  }, [requestFriendCnt, newMessageCnt]);
 
   return (
     <Wrapper>
