@@ -110,7 +110,7 @@ export const firstdata = async (req: Request, res: Response) => {
 };
 export const chargingCoin = async (req: Request, res: Response) => {
   const user = req.body;
-   // DB에서 이 유저의 userCoin을 찾아온다
+  // DB에서 이 유저의 userCoin을 찾아온다
   const userId = user.myInfo.userId;
 
   const foundUser = await User.findOne({
