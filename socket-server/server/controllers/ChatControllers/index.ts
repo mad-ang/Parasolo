@@ -14,7 +14,6 @@ interface IRoomParams {
   friendId: string;
 }
 
-
 const time_diff = 9 * 60 * 60 * 1000;
 
 const createRoom = () => {
@@ -39,7 +38,7 @@ export const chatController = (socket: Socket) => {
       roomId = createRoom();
       updateRoomId({ myId: userId, friendId: friendId, roomId: roomId }).then(() => {
         // userMap.get(friendId)?.emit('updata-room-id');
-        rooms[roomId].push(userId); 
+        rooms[roomId].push(userId);
       });
     }
     readMessage({ roomId, userId, friendId });
@@ -84,6 +83,7 @@ export const chatController = (socket: Socket) => {
   // room에 처음 참여하는 경우는 db에서 불러온 값을 그대로 보여줌.
   const readMessage = (message: { roomId: string; userId: string; friendId: string }) => {
     const { roomId, userId, friendId } = message;
+
 
     getChatMessage(userId, friendId)
       .then((chatMessage) => {

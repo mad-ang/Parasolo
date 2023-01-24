@@ -4,13 +4,14 @@ import cors from 'cors';
 import { Server, LobbyRoom } from 'colyseus';
 import { monitor } from '@colyseus/monitor';
 import { RoomType } from '../types/Rooms';
-
 // import { sequelize } from './DB/db'
 // import socialRoutes from "@colyseus/social/express"
 import 'express-async-errors';
 import { ParaSolo } from './rooms/ParaSolo';
 import { connectDB } from './DB/db';
 import S3 from './s3';
+
+const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 const port = Number(process.env.PORT || 8080);
 const app = express();
@@ -53,7 +54,6 @@ gameServer.define(RoomType.PUBLIC, ParaSolo, {
 });
 connectDB()
   .then((db) => {
-    // console.log('init!', db)
     gameServer.listen(port);
 
     console.log(`Listening on ws://localhost:${port}`);
@@ -67,4 +67,5 @@ app.use((err, res) => {
     message: `서버 오류: ${err}`,
   });
 });
+
 S3.init();

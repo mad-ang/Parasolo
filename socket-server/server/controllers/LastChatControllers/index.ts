@@ -14,7 +14,6 @@ export const loaddata = async (req: Request, res: Response) => {
     });
   getLastChat(user.userId)
     .then((result) => {
-      console.log(result);
       res.status(200).json({
         status: 200,
         payload: result,
@@ -183,7 +182,7 @@ const addLastChat = async (obj: {
       status: obj.status,
       message: obj.message,
       roomId: 'start',
-      unread: 0,
+      unreadCount: 0,
       updatedAt: createAt,
     });
     LastChat.collection.insertOne({
@@ -192,7 +191,7 @@ const addLastChat = async (obj: {
       status: obj.status,
       message: obj.message,
       roomId: 'start',
-      unread: 1,
+      unreadCount: 1,
       updatedAt: createAt,
     });
     console.log('in addLastChatresult');
@@ -217,17 +216,21 @@ export const updateRoomStatus = async (obj: {
   isAccept: number;
 }) => {
   const { myId, friendId, status, isAccept } = obj;
-  console.log('updateRoomStatus', obj);
   if (!isAccept) {
-    LastChat.collection.deleteOne({ $and: [{ 'myInfo.userId': myId }, { unread: 1 }] });
-    LastChat.collection.deleteOne({ $and: [{ 'friendInfo.userId': myId }, { unread: 0 }] });
+    LastChat.collection.deleteOne({
+      $and: [{ 'myInfo.userId': myId }, { 'friendInfo.userId': friendId }],
+    });
+    LastChat.collection.deleteOne({
+      $and: [{ 'myInfo.userId': friendId }, { 'friendInfo.userId': myId }],
+    });
     return;
   }
-  await LastChat.collection.findOneAndUpdate(
+
+  LastChat.collection.findOneAndUpdate(
     { $and: [{ 'myInfo.userId': myId }, { 'friendInfo.userId': friendId }] },
     { $set: { status: status } }
   );
-  await LastChat.collection.findOneAndUpdate(
+  LastChat.collection.findOneAndUpdate(
     { $and: [{ 'myInfo.userId': friendId }, { 'friendInfo.userId': myId }] },
     { $set: { status: status } }
   );
@@ -265,22 +268,36 @@ export const updateLastChat = async (obj: { myId: string; friendId: string; mess
 };
 export const updateRoomId = async (obj: { myId: string; friendId: string; roomId: string }) => {
   const { myId, friendId, roomId } = obj;
-  console.log(obj);
-  await LastChat.collection.findOneAndUpdate(
+  LastChat.collection.findOneAndUpdate(
     { $and: [{ 'myInfo.userId': myId }, { 'friendInfo.userId': friendId }] },
     { $set: { roomId: roomId, unreadCount: 0 } }
   );
-  await LastChat.collection.findOneAndUpdate(
+  LastChat.collection.findOneAndUpdate(
     { $and: [{ 'myInfo.userId': friendId }, { 'friendInfo.userId': myId }] },
     { $set: { roomId: roomId } }
   );
 };
+
+export const updateUnread = async (
+  obj: {
+    myId: string;
+    friendId: string;
+  },
+  targetCnt: number = 0
+) => {
+  const { myId, friendId } = obj;
+
+  LastChat.collection.findOneAndUpdate(
+    { $and: [{ 'myInfo.userId': myId }, { 'friendInfo.userId': friendId }] },
+    { $set: { unreadCount: targetCnt } }
+  );
+};
+
 export const getLastChat = async (myId: string) => {
   let result = new Array();
   try {
     await LastChat.collection
       .find({ 'myInfo.userId': myId })
-      .limit(20)
       .sort({ _id: -1 })
       .toArray()
       .then((elem) => {

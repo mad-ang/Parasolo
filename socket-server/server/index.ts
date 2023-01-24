@@ -11,6 +11,7 @@ import { connectDB, createCollection } from './DB/db';
 import { chatController } from './controllers/ChatControllers';
 import { Socket } from 'socket.io';
 import S3 from './s3';
+
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 const socketPort = Number(process.env.SOCKET_PORT || 5002);
@@ -31,9 +32,9 @@ const options: cors.CorsOptions = {
     'https://www.momstown.site',
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
-    'http://localhost:5173',
+    // 'http://localhost:5173',
     'http://localhost:5174',
-    'http://localhost'
+    'http://localhost',
   ],
   preflightContinue: false,
 };
@@ -62,7 +63,6 @@ export const io = require('socket.io')(socketServer, {
 });
 connectDB()
   .then((db) => {
-    // console.log('init!', db)
     socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 
     console.log(`Listening on ws://localhost:${socketServer}`);
@@ -72,20 +72,20 @@ connectDB()
 export const userMap = new Map<string, Socket>();
 
 io.on('connection', (socket: Socket) => {
-  
   socket.on('whoAmI', (userId) => {
     userMap.set(userId, socket);
   });
   chatController(socket);
+
   socket.on('disconnect', () => {
     // Todo: delete on userMap.
     console.log('the challenger disconnected');
   });
+
   socket.on('connect_error', (err) => {
     console.log(`connect_error due to ${err.message}`);
   });
 });
-
 
 socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 S3.init();

@@ -163,9 +163,7 @@ export class ParaSolo extends Room<ParaState> {
     this.onMessage(
       Message.SEND_PRIVATE_MESSAGE,
       (client, message: { senderId: string; receiverId: string; content: string }) => {
-
         const { senderId, receiverId, content } = message;
-
       }
     );
 
@@ -173,7 +171,6 @@ export class ParaSolo extends Room<ParaState> {
       Message.CHECK_PRIVATE_MESSAGE,
       (client, message: { requestId: string; targetId: string }) => {
         const { requestId, targetId } = message;
-
 
         getChatMessage(requestId, targetId)
           .then((chatMessage) => {
@@ -185,12 +182,6 @@ export class ParaSolo extends Room<ParaState> {
       }
     );
     this.onMessage('make_friend', (client, message: {}) => {});
-    
-
-
-
-
-
 
     // when a player is ready to connect, call the PlayerReadyToConnectCommand
     this.onMessage(Message.VIDEO_CONNECTED, (client) => {
@@ -236,7 +227,6 @@ export class ParaSolo extends Room<ParaState> {
 
   onJoin(client: Client, options: any) {
     this.state.players.set(client.sessionId, new Player());
-
     client.send(Message.SEND_ROOM_DATA, {
       id: this.roomId,
       name: this.name,
