@@ -138,7 +138,6 @@ function Swipe(props) {
                       <ProfileAvatarImage
                         ref={imgRef}
                         src={player?.userProfile?.profileImgUrl || DefaultAvatar}
-                        // src={player.userInfo.profileImgUrl || DefaultAvatar}
                         className="personal-avatar"
                         alt="avatar"
                         onError={() => {
