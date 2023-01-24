@@ -41,7 +41,6 @@ export default class chatNetwork {
 
     this.socketClient.on('message', (data) => {
       data.id = 1;
-      // callback(data);
       store.dispatch(setNewMessage(data));
       store.dispatch(setNewMessageCnt(1));
     });

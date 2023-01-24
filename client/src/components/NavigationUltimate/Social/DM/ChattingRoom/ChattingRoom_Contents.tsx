@@ -10,7 +10,7 @@ import phaserGame from 'src/PhaserGame';
 // import {DMSlice} from 'src/stores/DMboxStore';
 import { Colors } from 'src/utils/Colors';
 import { color } from '@mui/system';
-import { setNewMessageCnt, setRequestFriendCnt } from 'src/stores/DMboxStore';
+import { setNewMessage, setNewMessageCnt, setRequestFriendCnt } from 'src/stores/DMboxStore';
 import { IChatRoomStatus } from 'src/api/chat';
 const Wrapper = styled.div`
   height: 450px;
@@ -38,6 +38,7 @@ export default function ChatBubbles(props) {
   useEffect(() => {
     console.log('마운트');
     socketNetwork.joinRoom(roomId, userId, friendId, callbackForJoinRoom);
+  }, []);
 
   useEffect(() => {
     if (!props.newMessage || props.newMessage?.message.length === 0) return;
