@@ -27,11 +27,11 @@ const options: cors.CorsOptions = {
   credentials: true,
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   origin: [
-    'https://www.momstown.site',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
+    'https://www.para-solo.site',
+    'http://www.para-solo.site',
     'http://localhost:5173',
     'http://localhost:5174',
+    `http://3.39.240.238`,
   ],
   preflightContinue: false,
 };

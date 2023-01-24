@@ -15,7 +15,7 @@ ENV NODE_ENV=production \
     AWS_SECRET_ACCESS_KEY=WlMuE8dFAxrsKw57SyfxzHyX9WNtcHZZfTMq4hR4
 
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "./server/tsconfig.server.json", "./"]
+COPY ["package.json", "./server/tsconfig.server.json", "./"]
 RUN yarn install 
 COPY . .
 RUN yarn build

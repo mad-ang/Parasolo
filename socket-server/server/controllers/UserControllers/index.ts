@@ -24,7 +24,6 @@ async function hashPassword(user: IUserInfo) {
   });
 
   return hashedPassword;
-  // return password
 }
 
 export const signUp = async (req: Request, res: Response) => {

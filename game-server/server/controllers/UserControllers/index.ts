@@ -99,10 +99,10 @@ export const login = async (req: Request, res: Response) => {
       message: '아이디를 확인해주세요.',
     });
   } else {
-    const isPasswordCorrect = false
-    if (foundUser.password) {
-      const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
-    }
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      foundUser.password ? foundUser.password : ''
+    );
     if (isPasswordCorrect) {
       const accessToken = jwt.sign(
         {

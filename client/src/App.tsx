@@ -32,7 +32,8 @@ import UserCoinDialog from './components/UserCoinDialog';
 
 const cookies = new Cookies();
 
-axios.defaults.baseURL = 'http://localhost:5002'
+axios.defaults.baseURL = `http://${window.location.hostname}:5002`
+// 'http://localhost:5002'
   // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
   //   ? `https://${import.meta.env.VITE_SERVER_URL}`
   //   : `http://${window.location.hostname}:5002`;
