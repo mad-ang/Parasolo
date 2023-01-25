@@ -13,6 +13,7 @@ import 'express-async-errors';
 import { v4 as uuidv4 } from 'uuid';
 
 async function hashPassword(user: IUserInfo) {
+
   const password = user.password;
   const saltRounds = config.bcrypt.saltRounds;
   const hashedPassword = await new Promise((resolve, reject) => {
@@ -111,7 +112,7 @@ export const login = async (req: Request, res: Response) => {
           username: foundUser.username,
           uuid: uuidv4(),
         },
-        config.jwt.secretKey,
+      config.jwt.secretKey,
         {
           expiresIn: '1h',
         }
@@ -273,10 +274,9 @@ export const updateUser = async (userId: string, userProfile: IUserProfile) => {
     )
     .then(() => {
       console.log('DB 업데이트', userId, userProfile);
-      console.log('successfully updated');
     })
     .catch(function (error) {
-      console.log(error);
+      console.error('updateUserName',error);
     });
 };
 
@@ -292,10 +292,9 @@ export const updateUserName = async (userId: string, username: string) => {
     )
     .then(() => {
       console.log('DB 업데이트', userId, username);
-      console.log('successfully updated');
     })
     .catch(function (error) {
-      console.log(error);
+      console.error('updateUserName',error);
     });
 };
 
