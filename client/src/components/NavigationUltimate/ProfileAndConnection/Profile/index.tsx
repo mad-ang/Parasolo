@@ -165,7 +165,7 @@ function ProfileEditModal(props) {
                     }}
                   />
                   <figcaption
-                    style={{ marginTop: -2, marginLeft: -82 }}
+                    style={{ marginTop: 0, marginLeft: -80 }}
                     className="personal-figcaption"
                   >
                     <CameraImage src={CameraImg} />
@@ -565,3 +565,6 @@ const ConnectionStatusWithSmallLight = styled.div`
   margin-right: 5px;
   margin-left: 5px;
 `;
+
+  
+  

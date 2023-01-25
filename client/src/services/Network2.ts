@@ -16,7 +16,7 @@ export default class chatNetwork {
   constructor() {
     const socketUrl = 
       process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-        ? `http://15.164.233.132:5002`
+        ? `http://43.201.32.156:5002`
         : `http://${window.location.hostname}:5002`;
 
     this.socketClient = io(`${socketUrl}`,{path: "/socket/"});
@@ -40,7 +40,6 @@ export default class chatNetwork {
 
     this.socketClient.on('message', (data) => {
       data.id = 1;
-      // console.log('새 메시지 ', data);
       store.dispatch(setNewMessage(data));
       store.dispatch(setNewMessageCnt(1));
     });

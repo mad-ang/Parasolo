@@ -126,7 +126,6 @@ export default function SignInDialog() {
             .catch((error) => console.error(error));
           bootstrap.network2.whoAmI(payload.userId);
           dispatch(setStoreUserId(payload.userId));
-          console.log('200 로그인 성공인딩');
           return true;
         } else {
           setFailLogin(true);

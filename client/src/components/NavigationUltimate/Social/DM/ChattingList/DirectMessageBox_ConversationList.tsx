@@ -10,6 +10,7 @@ import {
   setFriendName,
   setRoomId,
   setNewMessageCnt,
+  setNewMessage,
   setdmProcess,
 } from '../../../../../stores/DMboxStore';
 import { useAppDispatch, useAppSelector } from '../../../../../hooks';
@@ -70,7 +71,7 @@ export const ConversationList = () => {
       setFriendRequestProps(room.friendInfo);
 
       // // 친구 수락, 거절 창 띄우고 -> dmProcess를 room.status(IChatRoomStatus.FRIEND_REQUEST) 로 바꿈
-      // dispatch(setdmProcess(room.status));
+
     } else {
       console.log("This room's status is... ", room.status);
       try {
@@ -82,6 +83,7 @@ export const ConversationList = () => {
 
         // room의 unreadCount, room.status 설정해준다
         dispatch(setNewMessageCnt(-1 * room.unreadCount));
+        dispatch(setNewMessage({ message: '' }));
         dispatch(setdmProcess(room.status));
       } catch (error) {
         console.log('error', error);
@@ -91,10 +93,15 @@ export const ConversationList = () => {
   return (
     <DMmessageList>
       <UnorderedList>
-        {rooms &&
+        { rooms.length !==0 ?
           rooms.map((room) => {
-            if (newMessage?.message && newMessage?.userId === room.friendInfo?.userId) {
+            if (newMessage?.message && newMessage?.userId === room.friendInfo?.userId &&
+              room.unreadCount === 0) {
               room.unreadCount! += 1;
+            }
+
+            if (room.status !== IChatRoomStatus.FRIEND_REQUEST && newMessageCnt === 0) {
+              room.unreadCount = 0;
             }
 
             return (
@@ -124,7 +131,10 @@ export const ConversationList = () => {
                 </IDwithLastmessage>
               </ListTag>
             );
-          })}
+          }) :
+          <><Textbox> 채팅방에 아무도 없어요 🥲 </Textbox>
+        <Textbox> 친구 신청을 보내보아요 </Textbox></>
+          }
       </UnorderedList>
       {friendRequestModal ? (
         <FriendRequest
@@ -212,3 +222,9 @@ const DMmessageList = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+const Textbox = styled.div`
+font-size: 20px;
+text-align: center;
+margin: 5px;
+`
