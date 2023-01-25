@@ -36,7 +36,7 @@ export default class Network {
   mySessionId!: string;
 
   constructor() {
-    const endpoint = `ws://${window.location.hostname}:8080`
+    const endpoint = `wss://www.para-solo.site/game-server`
     // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
     //   ? `wss://${import.meta.env.VITE_SERVER_URL}`
     //   : `ws://${window.location.hostname}:8080`;

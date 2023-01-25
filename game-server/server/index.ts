@@ -59,12 +59,19 @@ connectDB()
     console.log(`Listening on ws://localhost:${port}`);
   })
   .catch(console.error);
-
-app.use((err, res) => {
-  console.error(err);
-  res.status(500).json({
-    status: 500,
-    message: `서버 오류: ${err}`,
+  //@ts-ignore
+  app.use((err, res) => {
+    console.error(err);
+    res.status(500).send(err);
+    // res.status(err.status).send(err.message)
   });
-});
+  //@ts-ignore
+  // app.use(function(err, req, res, next) {
+  //   res.status(err.status || 500);
+  //   next(err);
+  //   res.render('error', {
+  //   message: err.message,
+  //   error: {}
+  //   });
+  // });
 S3.init();

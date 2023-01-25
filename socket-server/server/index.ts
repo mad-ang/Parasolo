@@ -1,5 +1,6 @@
 import http from 'http';
 import express from 'express';
+import { Request, Response } from 'express';
 import cors from 'cors';
 import authRouter from './routes/auth';
 import chatRouter from './routes/chat';
@@ -13,8 +14,14 @@ import { Socket } from 'socket.io';
 import S3 from './s3';
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
+const path = require('path'); 
+
+
+
 const socketPort = Number(process.env.SOCKET_PORT || 5002);
 const app = express();
+app.set('view engine', 'ejs'); 
+// app.set('views', path.join(__dirname, 'views')); 
 app.use(cookieParser());
 const options: cors.CorsOptions = {
   allowedHeaders: [
@@ -39,17 +46,18 @@ const options: cors.CorsOptions = {
 
 app.use(cors(options));
 app.use(express.json());
-app.use('/auth', authRouter);
-app.use('/chat', chatRouter);
-app.use('/image', imageRouter);
 
+app.use('/socket-server/auth/', authRouter);
+app.use('/socket-server/chat/', chatRouter);
+app.use('/socket-server/image/', imageRouter);
+
+// @ts-ignore
 app.use((err, res) => {
   console.error(err);
-  res.status(500).json({
-    status: 500,
-    message: `서버 오류: ${err}`,
-  });
+  res.status(500).send(err);
+  // res.status(err.status).send(err.message)
 });
+
 
 const socketServer = http.createServer(app);
 export const io = require('socket.io')(socketServer, {
@@ -64,7 +72,7 @@ connectDB()
     // console.log('init!', db)
     socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 
-    console.log(`Listening on ws://localhost:${socketServer}`);
+    console.log(`Listening on wss://localhost:${socketServer}`);
   })
   .catch(console.error);
 

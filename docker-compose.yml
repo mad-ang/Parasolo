@@ -2,25 +2,22 @@ version: "3"
 
 services:
   nginx:
-    depends_on:
-      - client
-      - game-server
-      - socket-server
-      # - certbot
     image: nginx:alpine
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
       # - "443:3000"
     restart: always
     volumes:
-      # - ./certbot/conf:/etc/letsencrypt
-      # - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
       - ./https:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     
   client:
+    depends_on:
+      - nginx
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -31,7 +28,9 @@ services:
     volumes:
       - ./https:/usr/share/nginx/html
 
-  game-server:
+  game:
+    depends_on:
+      - nginx
     build:
       context: ./game-server
       dockerfile: Dockerfile
@@ -39,11 +38,15 @@ services:
     container_name: game-server
     ports:
       - "8080:8080"
+    expose:
+      - "8080"
     volumes:
       - ./https:/usr/share/nginx/html
       - ./game-server:/app/
 
-  socket-server:
+  socket:
+    depends_on:
+      - nginx
     build:
       context: ./socket-server
       dockerfile: Dockerfile
@@ -51,16 +54,20 @@ services:
     container_name: socket-server
     ports:
       - "5002:5002"
+    expose:
+      - "5002"
     volumes:
       - ./https:/usr/share/nginx/html
       - ./socket-server:/app/
 
   # certbot:
+  #   # depends_on:
+  #   #   - nginx
   #   image: certbot/certbot
   #   container_name: certbot
   #   volumes:
   #     - ./certbot/conf:/etc/letsencrypt
   #     - ./certbot/www:/var/www/certbot
   #     - ./https:/usr/share/nginx/html
-  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-  #   command: certonly --webroot --webroot-path=/usr/share/nginx/html --email atthenoon@gmail.com --agree-tos --no-eff-email -d para-solo.site -d www.para-solo.site --force-renewal
+  #   command: certonly --webroot --webroot-path=/usr/share/nginx/html --email atthenoon@gmail.com --agree-tos --no-eff-email --keep-until-expiring -d para-solo.site -d www.para-solo.site
+  #   # entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
