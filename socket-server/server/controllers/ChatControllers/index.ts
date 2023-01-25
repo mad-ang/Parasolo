@@ -84,6 +84,7 @@ export const chatController = (socket: Socket) => {
   const readMessage = (message: { roomId: string; userId: string; friendId: string }) => {
     const { roomId, userId, friendId } = message;
 
+
     getChatMessage(userId, friendId)
       .then((chatMessage) => {
         socket.emit('old-messages', chatMessage);

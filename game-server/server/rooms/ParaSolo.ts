@@ -159,7 +159,29 @@ export class ParaSolo extends Room<ParaState> {
       const player = this.state.players.get(client.sessionId);
       if (player) player.readyToConnect = true;
     });
-    
+
+    this.onMessage(
+      Message.SEND_PRIVATE_MESSAGE,
+      (client, message: { senderId: string; receiverId: string; content: string }) => {
+        const { senderId, receiverId, content } = message;
+      }
+    );
+
+    this.onMessage(
+      Message.CHECK_PRIVATE_MESSAGE,
+      (client, message: { requestId: string; targetId: string }) => {
+        const { requestId, targetId } = message;
+
+        getChatMessage(requestId, targetId)
+          .then((chatMessage) => {
+            client.send(Message.CHECK_PRIVATE_MESSAGE, chatMessage);
+          })
+          .catch((error) => {
+            console.error('CHECK_PRIVATE_MESSAGE', error);
+          });
+      }
+    );
+    this.onMessage('make_friend', (client, message: {}) => {});
 
     // when a player is ready to connect, call the PlayerReadyToConnectCommand
     this.onMessage(Message.VIDEO_CONNECTED, (client) => {
@@ -205,8 +227,6 @@ export class ParaSolo extends Room<ParaState> {
 
   onJoin(client: Client, options: any) {
     this.state.players.set(client.sessionId, new Player());
-    console.log('this.roomId', this.roomId);
-
     client.send(Message.SEND_ROOM_DATA, {
       id: this.roomId,
       name: this.name,
@@ -226,7 +246,7 @@ export class ParaSolo extends Room<ParaState> {
   }
 
   onDispose() {
-    console.log('room', this.roomId, 'disposing...');
+    // console.log('room', this.roomId, 'disposing...');
     this.dispatcher.stop();
   }
 }

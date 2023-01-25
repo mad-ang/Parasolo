@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 // import jwt from 'jsonwebtoken';
 
 import { config } from '../../envconfig';
@@ -13,6 +13,7 @@ import 'express-async-errors';
 import { v4 as uuidv4 } from 'uuid';
 
 async function hashPassword(user: IUserInfo) {
+
   const password = user.password;
   const saltRounds = config.bcrypt.saltRounds;
   const hashedPassword = await new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ async function hashPassword(user: IUserInfo) {
 
 export const signUp = async (req: Request, res: Response) => {
   const user = req.body;
-  console.log('signtup check', req.body);
+
   if (!user.userId) {
     return res.status(400).json({
       status: 400,
@@ -98,57 +99,58 @@ export const login = async (req: Request, res: Response) => {
       status: 400,
       message: '아이디를 확인해주세요.',
     });
-  }
-  const isPasswordCorrect = await bcrypt.compare(
-    password,
-    foundUser.password ? foundUser.password : ''
-  );
-  if (isPasswordCorrect) {
-    const accessToken = jwt.sign(
-      {
-        userId: foundUser.userId,
-        username: foundUser.username,
-        uuid: uuidv4(),
-      },
-      config.jwt.secretKey,
-      {
-        expiresIn: '1h',
-      }
-    );
-
-    const refreshToken = jwt.sign(
-      {
-        userId: foundUser.userId,
-        username: foundUser.username,
-        uuid1: uuidv4(),
-        uuid2: uuidv4(),
-      },
-      config.jwt.secretKey
-    );
-
-    await User.collection.updateOne(
-      { userId: foundUser.userId },
-      {
-        $set: {
-          refreshToken: refreshToken,
-          lastUpdated: new Date(),
-        },
-      }
-    );
-
-    res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
-    res.status(200).json({
-      status: 200,
-      payload: {
-        userId: foundUser.userId,
-        accessToken: accessToken,
-      },
-    });
   } else {
-    return res.status(400).json({
-      status: 400,
-      message: '비밀번호가 올바르지 않습니다.',
-    });
+    const isPasswordCorrect = false
+    if (foundUser.password) {
+      // const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
+    }
+    if (isPasswordCorrect) {
+      const accessToken = jwt.sign(
+        {
+          userId: foundUser.userId,
+          username: foundUser.username,
+          uuid: uuidv4(),
+        },
+      config.jwt.secretKey,
+        {
+          expiresIn: '1h',
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: foundUser.userId,
+          username: foundUser.username,
+          uuid1: uuidv4(),
+          uuid2: uuidv4(),
+        },
+        config.jwt.secretKey
+      );
+
+      await User.collection.updateOne(
+        { userId: foundUser.userId },
+        {
+          $set: {
+            refreshToken: refreshToken,
+            lastUpdated: new Date(),
+          },
+        }
+      );
+
+      res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
+      res.status(200).json({
+        status: 200,
+        payload: {
+          userId: foundUser.userId,
+          accessToken: accessToken,
+        },
+      });
+    } else {
+      return res.status(400).json({
+        status: 400,
+        message: '비밀번호가 올바르지 않습니다.',
+      });
+    }
   }
 };
 
@@ -271,10 +273,9 @@ export const updateUser = async (userId: string, userProfile: IUserProfile) => {
     )
     .then(() => {
       console.log('DB 업데이트', userId, userProfile);
-      console.log('successfully updated');
     })
     .catch(function (error) {
-      console.log(error);
+      console.error('updateUserName',error);
     });
 };
 
@@ -290,10 +291,9 @@ export const updateUserName = async (userId: string, username: string) => {
     )
     .then(() => {
       console.log('DB 업데이트', userId, username);
-      console.log('successfully updated');
     })
     .catch(function (error) {
-      console.log(error);
+      console.error('updateUserName',error);
     });
 };
 
@@ -391,3 +391,4 @@ export const lookupUser = async (req: Request, res: Response) => {
   //   result.push(user.userId)
   // })
 };
+

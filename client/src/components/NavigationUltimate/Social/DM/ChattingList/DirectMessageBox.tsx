@@ -158,9 +158,12 @@ export default function DMboxButton() {
     }
   }
 
+  
+
   return (
     <Wrapper>
       <StyledRedBox onClick={handleClick} pressed={ActivatedNav}>
+        
         {(requestFriendCnt > 0 || newMessageCnt > 0) && (
           <UnreadBadge>{requestFriendCnt + newMessageCnt}</UnreadBadge>
         )}
@@ -177,6 +180,8 @@ export default function DMboxButton() {
           {ActivatedNav === ModalState.ChattingListAndRoom ? <InsideChattingRoom /> : null}
         </div>
       )} */}
+
+      
     </Wrapper>
   );
 }

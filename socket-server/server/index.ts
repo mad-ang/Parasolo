@@ -12,6 +12,7 @@ import { connectDB, createCollection } from './DB/db';
 import { chatController } from './controllers/ChatControllers';
 import { Socket } from 'socket.io';
 import S3 from './s3';
+
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 const path = require('path'); 
@@ -69,7 +70,6 @@ export const io = require('socket.io')(socketServer, {
 });
 connectDB()
   .then((db) => {
-    // console.log('init!', db)
     socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 
     console.log(`Listening on wss://localhost:${socketServer}`);
@@ -79,17 +79,20 @@ connectDB()
 export const userMap = new Map<string, Socket>();
 
 io.on('connection', (socket: Socket) => {
-  
   socket.on('whoAmI', (userId) => {
     userMap.set(userId, socket);
   });
   chatController(socket);
+
   socket.on('disconnect', () => {
     // Todo: delete on userMap.
     console.log('the challenger disconnected');
   });
+
+  socket.on('connect_error', (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
 });
 
-
-
+socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
 S3.init();
