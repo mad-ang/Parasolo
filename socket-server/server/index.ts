@@ -1,87 +1,73 @@
-import http from 'http';
+import http, { createServer } from 'http';
 import express from 'express';
-import { Request, Response } from 'express';
 import cors from 'cors';
-import authRouter from './routes/auth';
-import chatRouter from './routes/chat';
-import imageRouter from './routes/image';
-// import { sequelize } from './DB/db'
-// import socialRoutes from "@colyseus/social/express"
+import type { ErrorRequestHandler } from "express";
 import 'express-async-errors';
-import { connectDB, createCollection } from './DB/db';
+import { connectDB } from './DB/db';
 import { chatController } from './controllers/ChatControllers';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import S3 from './s3';
-
-const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
-const path = require('path'); 
 
 
 
-const socketPort = Number(process.env.SOCKET_PORT || 5002);
+
+const socketPort = Number(process.env.SOCKET_PORT || 3000);
 const app = express();
-app.set('view engine', 'ejs'); 
-// app.set('views', path.join(__dirname, 'views')); 
-app.use(cookieParser());
-const options: cors.CorsOptions = {
-  allowedHeaders: [
-    'Origin',
-    'X-Requested-With',
-    'Content-Type',
-    'Accept',
-    'X-Access-Token',
-    'authorization',
-  ],
-  credentials: true,
-  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-  origin: [
-    'https://www.para-solo.site',
-    'http://www.para-solo.site',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    `http://3.39.240.238`,
-  ],
-  preflightContinue: false,
-};
+app.use(cookieParser())
 
-app.use(cors(options));
-app.use(express.json());
+// const options: cors.CorsOptions = {
+//   allowedHeaders: [
+//     'Origin',
+//     'X-Requested-With',
+//     'Content-Type',
+//     'Accept',
+//     'X-Access-Token',
+//     'authorization',
+//   ],
+//   credentials: true,
+//   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+//   origin: [
+//     'https://www.para-solo.site',
+//     'http://www.para-solo.site',
+//     'http://localhost:5173',
+//     'http://localhost:5174',
+//     `http://3.39.240.238`,
+//   ],
+//   preflightContinue: false,
+// };
 
-app.use('/socket-server/auth/', authRouter);
-app.use('/socket-server/chat/', chatRouter);
-app.use('/socket-server/image/', imageRouter);
-
-// @ts-ignore
-app.use((err, res) => {
-  console.error(err);
-  res.status(500).send(err);
-  // res.status(err.status).send(err.message)
-});
-
-
+// app.use(cors(options));
+// app.use(express.json());
 const socketServer = http.createServer(app);
-export const io = require('socket.io')(socketServer, {
-  path: '/socket/',
+
+const httpServer = createServer();
+export const userMap = new Map<string, Socket>();
+export const io = require('socket.io')(httpServer, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
-connectDB()
-  .then((db) => {
-    socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
-
-    console.log(`Listening on wss://localhost:${socketServer}`);
-  })
-  .catch(console.error);
-
-export const userMap = new Map<string, Socket>();
-
+// io.attach('https://www.para-solo.site');
+// export const io = new Server({
+//   path: '/socket/',
+//   cors: {
+//     origin: ['https://www.para-solo.site', 'http://www.para-solo.site'],
+//     // methods: ['GET', 'POST'],
+//     // credentials: true,
+//   },
+// });
+// io.on("connect_error", (err) => {
+//   console.log(`connect_error due to ${err.message}`);
+// });
 io.on('connection', (socket: Socket) => {
   socket.on('whoAmI', (userId) => {
+    console.log(userId, "logined in socket-server.")
     userMap.set(userId, socket);
   });
+  console.log('connection');
   chatController(socket);
 
   socket.on('disconnect', () => {
@@ -94,5 +80,15 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-socketServer.listen(socketPort, () => console.log(`socketServer is running on ${socketPort}`));
+connectDB()
+.then((db) => {
+  io.listen(socketPort);
+  
+  console.log(`Listening on wss://localhost:${socketPort}`);
+})
+.catch(console.error);
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
+
+app.use(errorHandler);
+
 S3.init();

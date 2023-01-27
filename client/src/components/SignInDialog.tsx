@@ -110,27 +110,27 @@ export default function SignInDialog() {
           password: password,
         };
 
-        const data = await login(body);
-
-        if (data.status == 200) {
-          const { payload } = data;
-          const token = payload.accessToken;
-          if (token) {
-            dispatch(setAccessToken(token));
+        login(body).then((data) => {
+          if (data.status == 200) {
+            const { payload } = data;
+            const token = payload.accessToken;
+            if (token) {
+              dispatch(setAccessToken(token));
+            }
+  
+            const bootstrap = phaserGame.scene.keys.bootstrap as Bootstrap;
+            bootstrap.network
+              .joinOrCreatePublic()
+              .then(() => bootstrap.launchGame())
+              .catch((error) => console.error(error));
+            bootstrap.network2.whoAmI(payload.userId);
+            dispatch(setStoreUserId(payload.userId));
+            return true;
+          } else {
+            setFailLogin(true);
+            return false;
           }
-
-          const bootstrap = phaserGame.scene.keys.bootstrap as Bootstrap;
-          bootstrap.network
-            .joinOrCreatePublic()
-            .then(() => bootstrap.launchGame())
-            .catch((error) => console.error(error));
-          bootstrap.network2.whoAmI(payload.userId);
-          dispatch(setStoreUserId(payload.userId));
-          return true;
-        } else {
-          setFailLogin(true);
-          return false;
-        }
+        }); 
       }
     } catch (error) {
       console.log(error);

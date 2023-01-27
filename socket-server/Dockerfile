@@ -3,8 +3,6 @@ FROM node:19.3-alpine
 
 ENV NODE_ENV=production \
     BCRYPT_SALT_ROUNDS=8 \
-    PORT=8080 \
-    SOCKET_PORT=5002 \
     expiresInSec=1h \
     AWS_BUCKET_NAME=momstown-images \
     DB_HOST=mongodb+srv://suyeon:jeremy7474@cluster0.ixgejvq.mongodb.net/?retryWrites=true&w=majority \
@@ -18,5 +16,5 @@ COPY ["package.json", "./server/tsconfig.server.json", "./"]
 RUN yarn install 
 COPY . .
 RUN yarn build
-EXPOSE 5002
+EXPOSE 3000
 CMD ["yarn", "start"]

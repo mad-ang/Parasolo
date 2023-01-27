@@ -32,7 +32,7 @@ import UserCoinDialog from './components/UserCoinDialog';
 
 const cookies = new Cookies();
 
-axios.defaults.baseURL = 'https://www.para-solo.site/socket-server'
+axios.defaults.baseURL = 'https://www.para-solo.site/api-server'
 // 'http://localhost:5002'
   // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
   //   ? `https://${import.meta.env.VITE_SERVER_URL}`

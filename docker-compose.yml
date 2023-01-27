@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      # - "443:3000"
+      # - "3000:443"
     restart: always
     volumes:
       - ./certbot/conf:/etc/letsencrypt
@@ -53,13 +53,27 @@ services:
     restart: always
     container_name: socket-server
     ports:
-      - "5002:5002"
+      - "3000:3000"
     expose:
-      - "5002"
+      - "3000"
     volumes:
       - ./https:/usr/share/nginx/html
       - ./socket-server:/app/
-
+  api:
+    depends_on:
+      - nginx
+    build:
+      context: ./api-server
+      dockerfile: Dockerfile
+    restart: always
+    container_name: api-server
+    ports:
+      - "5005:5005"
+    expose:
+      - "5005"
+    volumes:
+      - ./https:/usr/share/nginx/html
+      - ./socket-server:/app/
   # certbot:
   #   # depends_on:
   #   #   - nginx

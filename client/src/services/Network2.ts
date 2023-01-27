@@ -14,15 +14,19 @@ export default class chatNetwork {
   public oldMessages: any[];
 
   constructor() {
-    const socketUrl = `https://www.para-solo.site/socket-server`
-    // 'http://localhost:5002'
-      // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-      //   ? `http://15.164.233.132:5002`
-      //   : `http://${window.location.hostname}:5002`;
-
-    this.socketClient = io(`${socketUrl}`,{path: "/socket/"});
+    const socketUrl = `https://www.para-solo.site`
+    // const socketUrl = `https://socket-server`
+    this.socketClient = io("www.parasolo-soc.com")
+    this.socketClient.on("connect_error", (err) => {
+      console.log(`connetion err${err.message}`);
+      
+    })
+    // this.socketClient = io("https://www.para-solo.site/socket-server", {
+    //   // path:'/socket/',
+    //   // withCredentials: true
+    // });
     this.oldMessages = [];
-
+    
     this.socketClient.on('request-friend', (data) => {
       store.dispatch(setRequestFriendCnt(1));
       fireNotification('[PARA-SOLO] 친구 요청 도착', {
@@ -46,12 +50,13 @@ export default class chatNetwork {
     });
   }
 
-  getSocket = () => {
+  async getSocket () {
     return this.socketClient;
   };
 
-  joinRoom = (roomId: string, userId: string, friendId: string, callback: any) => {
+  async joinRoom (roomId: string, userId: string, friendId: string, callback: any) {
     console.log('join!');
+    console.log(this.socketClient)
     this.socketClient.emit('join-room', { roomId: roomId, userId: userId, friendId: friendId });
 
     this.socketClient.on('old-messages', (data) => {
@@ -71,11 +76,12 @@ export default class chatNetwork {
     });
   };
 
-  sendMessage = (message: object) => {
+  async sendMessage (message: object) {
     this.socketClient.emit('message', message);
   };
 
-  whoAmI = (userId: string) => {
-    this.socketClient.emit('whoAmI', userId);
+  async whoAmI (userId: string) {
+    console.log('myId is ....', userId);
+    this.socketClient.emit('whoAmI', userId)
   };
 }
