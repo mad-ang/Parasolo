@@ -89,23 +89,7 @@ export default class MyPlayer extends Player {
     const item = playerSelector.selectedItem;
     const closePlayer = playerSelector.closePlayer;
     const game = phaserGame.scene.keys.game as Game;
-    //  쓰일수 있어서 주석처리.
-    // if (Phaser.Input.Keyboard.JustDown(keyE)) {
-    //   switch (item?.itemType) {
-    //     case ItemType.TABLE:
-    //       const table = item as Table;
-
-    // break;
-    // case ItemType.WHITEBOARD:
-    //   const whiteboard = item as Whiteboard;
-    //   whiteboard.openDialog(network);
-    //   break;
-    // case ItemType.VENDINGMACHINE:
-    //   // hacky and hard-coded, but leaving it as is for now
-    //   window.open("https://www.buymeacoffee.com/skyoffice", "_blank");
-    //   break;
-    // }
-    // }
+    
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE:
@@ -232,14 +216,6 @@ export default class MyPlayer extends Player {
           network.updateChairStatus(this.chairOnSit?.tableId, this.chairOnSit?.chairId, false);
           network.updatePlayer(this.x, this.y, this.anims.currentAnim.key);
         }
-        // this.chairOnSit?.clearDialogBox();
-        // this.chairOnSit?.setDialogBox("E키를 눌러서 일어나기");
-        // window.addEventListener("beforeunload", (event) => {
-        //   network.updateChairStatus(
-        //     this.chairOnSit?.chairId
-        //   );
-        //   event.returnValue = "다음에 또 방문해주세요!";
-        // });
         break;
     }
   }

@@ -52,13 +52,6 @@ export const ConversationList = () => {
     console.log('rooms', rooms);
   }, [rooms]);
 
-  // let roomId = '';
-  // let body = {
-  //   userId: userId,
-  //   friendId: friendId,
-  //   roomId: roomId,
-  // };
-
   const handleClick = async (room) => {
     console.log('friendInfo..', room.friendInfo);
     console.log('roomId는..', room.roomId);

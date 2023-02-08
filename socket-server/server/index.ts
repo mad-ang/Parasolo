@@ -8,60 +8,26 @@ import { chatController } from './controllers/ChatControllers';
 import { Socket, Server } from 'socket.io';
 import S3 from './s3';
 var cookieParser = require('cookie-parser');
-
-
-
-
-const socketPort = Number(process.env.SOCKET_PORT || 3000);
-const app = express();
-app.use(cookieParser())
-
-// const options: cors.CorsOptions = {
-//   allowedHeaders: [
-//     'Origin',
-//     'X-Requested-With',
-//     'Content-Type',
-//     'Accept',
-//     'X-Access-Token',
-//     'authorization',
-//   ],
-//   credentials: true,
-//   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-//   origin: [
-//     'https://www.para-solo.site',
-//     'http://www.para-solo.site',
-//     'http://localhost:5173',
-//     'http://localhost:5174',
-//     `http://3.39.240.238`,
-//   ],
-//   preflightContinue: false,
-// };
-
-// app.use(cors(options));
-// app.use(express.json());
-const socketServer = http.createServer(app);
-
-const httpServer = createServer();
+const socketPort = 3001
 export const userMap = new Map<string, Socket>();
-export const io = require('socket.io')(httpServer, {
+export const io = new Server(socketPort,{
   cors: {
-    origin: '*',
+    allowedHeaders: [
+          'Origin',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+          'X-Access-Token',
+          'authorization',
+        ],
+    origin: ['https://www.para-solo.site', 'http://www.para-solo.site'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
-// io.attach('https://www.para-solo.site');
-// export const io = new Server({
-//   path: '/socket/',
-//   cors: {
-//     origin: ['https://www.para-solo.site', 'http://www.para-solo.site'],
-//     // methods: ['GET', 'POST'],
-//     // credentials: true,
-//   },
-// });
-// io.on("connect_error", (err) => {
-//   console.log(`connect_error due to ${err.message}`);
-// });
+io.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 io.on('connection', (socket: Socket) => {
   socket.on('whoAmI', (userId) => {
     console.log(userId, "logined in socket-server.")
@@ -82,13 +48,12 @@ io.on('connection', (socket: Socket) => {
 
 connectDB()
 .then((db) => {
-  io.listen(socketPort);
+  // socketServer.listen(socketPort);
   
   console.log(`Listening on wss://localhost:${socketPort}`);
 })
 .catch(console.error);
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
 
-app.use(errorHandler);
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
 
 S3.init();

@@ -86,26 +86,6 @@ export default function BottomAppBar(props) {
   );
 }
 
-// const Input = styled.input.attrs(props => ({
-//   type: "text",
-//   size: props.size || "1em",
-// }))`
-//   border: 2px solid palevioletred;
-//   margin: 0.5em;
-//   padding: 0.5em 1em 0.5em 1em;
-
-//     fontFamily: 'Ycomputer-Regular',
-
-//   multiline: true;
-//   maxRows: 2;
-//   width: 100%;
-//   background: transparent;
-
-
-// `;
-
-
-
 const DirtyTalk = styled.div`
   display: flex;
   justify-content: flex-start;

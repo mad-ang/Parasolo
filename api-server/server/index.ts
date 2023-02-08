@@ -8,13 +8,9 @@ import imageRouter from './routes/image';
 // import socialRoutes from "@colyseus/social/express"
 import type { ErrorRequestHandler } from "express";
 import 'express-async-errors';
-import { connectDB, createCollection } from './DB/db';
-import { chatController } from './controllers/ChatControllers';
+import { connectDB } from './DB/db';
 import { Socket } from 'socket.io';
 import S3 from './s3';
-var cookieParser = require('cookie-parser');
-
-
 
 const socketPort = Number(process.env.SOCKET_PORT || 5005);
 const app = express();
@@ -53,58 +49,13 @@ connectDB()
 .catch(console.error);
 
 export const userMap = new Map<string, Socket>();
-// app.get('/', (req, res) => {
-//   console.log(req.header);
-//   // console.log(req.socket);
-//   res.status(200).json();
-// });
-
-// export const io = require('socket.io')(socketServer, {
-//   // path: '/socket/',
-//   cors: {
-//     origin: [ 'https://www.para-solo.site','http://www.para-solo.site',],
-//     methods: ['GET', 'POST'],
-//     credentials: true,
-//   },
-// });
-// console.log(io);
-// // app.use(cookieParser());
-
-// io.on('connection', (socket: Socket) => {
-//   socket.on('whoAmI', (userId) => {
-//     console.log(userId, "logined in socket-server.")
-//     userMap.set(userId, socket);
-//   });
-//   console.log('connection');
-//   chatController(socket);
-
-//   socket.on('disconnect', () => {
-//     // Todo: delete on userMap.
-//     console.log('the challenger disconnected');
-//   });
-
-//   socket.on('connect_error', (err) => {
-//     console.log(`connect_error due to ${err.message}`);
-//   });
-// });
-
 const router = express.Router()
-//@ts-ignore
-// app.use('/', (req, res) => {
-//   console.log('here /');
-// })
-//@ts-ignore
+
 app.use('/api-server', router);
 router.use('/auth', authRouter);
 router.use('/chat', chatRouter);
 router.use('/image', imageRouter);
-// const router= app.router('/socket-server')
-// router.use('/auth', authRouter);
-// router.use('/chat', chatRouter);
-// router.use('/image', imageRouter);
-// app.use('/socket-server/auth', authRouter);
-// app.use('/socket-server/chat', chatRouter);
-// app.use('/socket-server/image', imageRouter);
+
 
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};

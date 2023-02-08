@@ -160,8 +160,6 @@ export class ParaSolo extends Room<ParaState> {
       if (player) player.readyToConnect = true;
     });
 
-    this.onMessage('make_friend', (client, message: {}) => {});
-
     // when a player is ready to connect, call the PlayerReadyToConnectCommand
     this.onMessage(Message.VIDEO_CONNECTED, (client) => {
       const player = this.state.players.get(client.sessionId);

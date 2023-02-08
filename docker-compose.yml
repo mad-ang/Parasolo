@@ -4,9 +4,11 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
-      # - "3000:443"
+      - "3000:80"
+    #   - "443:443"
+    #   # - "3000:443"
+    # expose:
+    #   - "80"
     restart: always
     volumes:
       - ./certbot/conf:/etc/letsencrypt
@@ -23,8 +25,10 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: client
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
+    expose:
+      - "5173"
     volumes:
       - ./https:/usr/share/nginx/html
 
@@ -36,8 +40,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: game-server
-    ports:
-      - "8080:8080"
+    # ports:
+    #   - "8080:8080"
     expose:
       - "8080"
     volumes:
@@ -52,10 +56,10 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: socket-server
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     expose:
-      - "3000"
+      - "3001"
     volumes:
       - ./https:/usr/share/nginx/html
       - ./socket-server:/app/
@@ -67,8 +71,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: api-server
-    ports:
-      - "5005:5005"
+    # ports:
+    #   - "5005:5005"
     expose:
       - "5005"
     volumes:

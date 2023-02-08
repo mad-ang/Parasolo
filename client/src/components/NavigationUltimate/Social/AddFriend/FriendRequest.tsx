@@ -1,14 +1,10 @@
 import react, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-// import { SetWhichModalActivated, ModalState } from 'src/stores/NavbarStore';
 import { useAppSelector, useAppDispatch } from 'src/hooks';
 import phaserGame from 'src/PhaserGame';
 import Game from 'scenes/Game';
 import Colors from 'src/utils/Colors';
 import DefaultAvatar from 'src/assets/profiles/DefaultAvatar.png';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
-import { Button } from '@mui/material';
 import axios from 'axios';
 import { fetchRoomList } from 'src/api/chat';
 import ClearIcon from '@mui/icons-material/Close';

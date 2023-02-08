@@ -14,11 +14,14 @@ export default class chatNetwork {
   public oldMessages: any[];
 
   constructor() {
-    const socketUrl = `https://www.para-solo.site`
-    // const socketUrl = `https://socket-server`
-    this.socketClient = io("www.parasolo-soc.com")
+    // const socketUrl = `https://www.para-solo.site`
+    const socketUrl = `http://43.201.119.149:3000/`
+    // const socketUrl = `http://43.201.119.149:3000/socket-server/`
+    // this.socketClient = io("www.parasolo-soc.com")
+    this.socketClient = io(socketUrl)
     this.socketClient.on("connect_error", (err) => {
       console.log(`connetion err${err.message}`);
+      console.error(err)
       
     })
     // this.socketClient = io("https://www.para-solo.site/socket-server", {

@@ -2,8 +2,6 @@ import AWS from 'aws-sdk';
 import { config } from './envconfig';
 const { bucketName, bucketRegion, identityPoolId, accessKeyId, secretAccessKey } = config.aws;
 
-// import { updateUserInfo } from './auth';
-
 class _S3 {
   private bucketName: string | null = null;
   private bucketRegion: string | null = null;

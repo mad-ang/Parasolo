@@ -86,19 +86,7 @@ export interface CreateRoomResponse {
   roomName: string;
   lastChat: string;
   notReadChat: number;
-  // updatedAt: Date;
-  // lastReadChatId: number;
 }
-
-// 서버에서 채팅방 리스트에 대한 정보를 받아올 때
-// export interface RoomListResponse {
-//   friend: UserResponseDto;
-//   message: string; //친구와 나눈마지막 메세지
-//   roomId: number;
-//   unreadCount?: number;
-//   status: IChatRoomStatus; //0, 1, 2세가지가 들어옴
-//   updatedAt: Date;
-// }
 
 export interface RoomListResponse {
   _id?: string;
