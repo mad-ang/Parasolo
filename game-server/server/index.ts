@@ -28,11 +28,11 @@ const options: cors.CorsOptions = {
   credentials: true,
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   origin: [
-    'https://www.momstown.site',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
+    'https://www.para-solo.site',
+    'http://www.para-solo.site',
     'http://localhost:5173',
     'http://localhost:5174',
+    `http://3.39.240.238`,
   ],
   preflightContinue: false,
 };
@@ -59,13 +59,10 @@ connectDB()
     console.log(`Listening on ws://localhost:${port}`);
   })
   .catch(console.error);
-
-app.use((err, res) => {
-  console.error(err);
-  res.status(500).json({
-    status: 500,
-    message: `서버 오류: ${err}`,
+  //@ts-ignore
+  app.use((err, res) => {
+    console.error(err);
+    res.status(500).send(err);
+    // res.status(err.status).send(err.message)
   });
-});
-
 S3.init();

@@ -1,0 +1,9 @@
+/.cache
+/dist
+node_modules
+.env
+/.DS_Store
+/server/lib
+.vscode
+/server/.env
+Dockerfile

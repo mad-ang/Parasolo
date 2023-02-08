@@ -160,29 +160,6 @@ export class ParaSolo extends Room<ParaState> {
       if (player) player.readyToConnect = true;
     });
 
-    this.onMessage(
-      Message.SEND_PRIVATE_MESSAGE,
-      (client, message: { senderId: string; receiverId: string; content: string }) => {
-        const { senderId, receiverId, content } = message;
-      }
-    );
-
-    this.onMessage(
-      Message.CHECK_PRIVATE_MESSAGE,
-      (client, message: { requestId: string; targetId: string }) => {
-        const { requestId, targetId } = message;
-
-        getChatMessage(requestId, targetId)
-          .then((chatMessage) => {
-            client.send(Message.CHECK_PRIVATE_MESSAGE, chatMessage);
-          })
-          .catch((error) => {
-            console.error('CHECK_PRIVATE_MESSAGE', error);
-          });
-      }
-    );
-    this.onMessage('make_friend', (client, message: {}) => {});
-
     // when a player is ready to connect, call the PlayerReadyToConnectCommand
     this.onMessage(Message.VIDEO_CONNECTED, (client) => {
       const player = this.state.players.get(client.sessionId);

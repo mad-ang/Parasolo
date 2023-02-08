@@ -28,7 +28,7 @@ ENV NODE_ENV=production \
     # VITE_SERVER_URL=43.201.32.156:8080 \
     # VITE_SERVER_URL=momstown.herokuapp.com/ \
 WORKDIR /app
-COPY ["package.json", "package-lock.json*","tsconfig.*", "./"]
+COPY ["package.json","tsconfig.*", "./"]
 RUN yarn 
 COPY . .
 RUN yarn build

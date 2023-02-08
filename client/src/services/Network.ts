@@ -36,10 +36,11 @@ export default class Network {
   mySessionId!: string;
 
   constructor() {
-    const endpoint = 
-    process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
-      ? `wss://${import.meta.env.VITE_SERVER_URL}`
-      : `ws://${window.location.hostname}:8080`;
+    // const endpoint = `wss://www.para-solo.site/game-server`
+    const endpoint = `ws://43.201.119.149:3000/game-server`
+    // process.env.NODE_ENV === 'production' || import.meta.env.VITE_SERVER === 'PRO'
+    //   ? `wss://${import.meta.env.VITE_SERVER_URL}`
+    //   : `ws://${window.location.hostname}:8080`;
 
     console.log(process.env.NODE_ENV);
     this.client = new Client(endpoint);
